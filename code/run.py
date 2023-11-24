@@ -15,8 +15,7 @@ def run():
             if event.type == pygame.QUIT:
                 exit()
         moves(player)
-
-        draw(window, player)
+        draw(window, player, clock)
 
         pygame.display.flip()
         clock.tick(FPS)
@@ -26,32 +25,53 @@ def moves(player):
     player.move()
 
 
-def draw(window, player):
+def draw(window, player, clock):
     pygame.draw.rect(window, SKYBLUE, (0, 0, WIDTH, HALF_HEIGHT))
     pygame.draw.rect(window, DARKGRAY, (0, HALF_HEIGHT, WIDTH, HALF_HEIGHT))
     ray_casting(window, player.get_pos(), player.get_angle())
-    # pygame.draw.circle(window, GREEN, player.pos, 12)
-    # pygame.draw.line(window, GREEN, player.pos, (player.get_pos_x() + WIDTH * math.cos(player.get_angle()),
-    #                                              player.get_pos_y() + WIDTH * math.sin(player.get_angle())))
-    # for x, y in map:
-    #     pygame.draw.rect(window, DARKGRAY, (x, y, TITLE, TITLE), 2)
+
+    fps_now = pygame.font.SysFont('Arial', 36, bold=True)
+    render = fps_now.render(str(int(clock.get_fps())), 0, BLACK)
+    window.blit(render, (WIDTH - 56, 10))
 
 
 def ray_casting(window, player_pos, player_angle):
     cur_angle = player_angle - PLAYER_FOV
     xo, yo = player_pos
+    xp, yp = (xo // TITLE) * TITLE, (yo // TITLE) * TITLE
     for ray in range(NUMBER_RAYS):
         sin_angle = math.sin(cur_angle)
         cos_angle = math.cos(cur_angle)
-        for depth in range(MAX_DEPTH):
-            x = xo + depth * cos_angle
-            y = yo + depth * sin_angle
-
-            if (x // TITLE * TITLE, y // TITLE * TITLE) in map:
-                depth *= math.cos(player_angle - cur_angle)
-                height = COOFIC / depth
-                c = 255 / (1 + depth * depth * 0.0001)
-                color = (c, c, c)
-                pygame.draw.rect(window, color, (ray * SCALE, HALF_HEIGHT - height // 2, SCALE, height))
+        if cos_angle >= 0:
+            x = xp + TITLE
+            dx = 1
+        else:
+            x = xp
+            dx = -1
+        for i in range(0, WIDTH, TITLE):
+            depth_vertical = (x - xo) / cos_angle
+            y = yo + depth_vertical * sin_angle
+            if (((x + dx) // TITLE) * TITLE, (y // TITLE) * TITLE) in map:
                 break
+            x += dx * TITLE
+        if sin_angle >= 0:
+            y = yp + TITLE
+            dy = 1
+        else:
+            y = yp
+            dy = -1
+        for i in range(0, HEIGHT, TITLE):
+            depth_h = (y - yo) / sin_angle
+            x = xo + depth_h * cos_angle
+            if ((x // TITLE) * TITLE, ((y + dy) // TITLE) * TITLE) in map:
+                break
+            y += dy * TITLE
+        depth = depth_vertical
+        if depth > depth_h:
+            depth = depth_h
+        depth *= math.cos(player_angle - cur_angle)
+        height = COOFIC / depth
+        c = 255 / (1 + depth * depth * 0.0002)
+        color = (c, c // 2, c // 3)
+        pygame.draw.rect(window, color, (ray * SCALE, HALF_HEIGHT - height // 2, SCALE, height))
         cur_angle += DELTA_ANGLE

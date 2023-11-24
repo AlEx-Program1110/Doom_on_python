@@ -11,14 +11,14 @@ player_pos = [600, 400]
 player_angle = 0
 player_speed = 2
 
-FPS = 60
+FPS = 300
 
 BLOCK_CHAR = 'B'
 TITLE = 100
 
 FOV = math.pi / 3
 PLAYER_FOV = FOV / 2
-NUMBER_RAYS = 120
+NUMBER_RAYS = 300
 MAX_DEPTH = 800
 DELTA_ANGLE = FOV / NUMBER_RAYS
 DIST = NUMBER_RAYS / (2 * math.tan(PLAYER_FOV))
