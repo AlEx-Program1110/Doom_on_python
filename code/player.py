@@ -5,9 +5,9 @@ import pygame
 
 class Player:
     def __init__(self, pos, angle, speed):
-        self.pos = [600, 400]
-        self.angle = 0
-        self.speed = 2
+        self.pos = pos
+        self.angle = angle
+        self.speed = speed
 
     def move(self):
         sin_angle = math.sin(self.angle)

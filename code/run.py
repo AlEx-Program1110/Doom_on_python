@@ -3,6 +3,7 @@ from setting_variables import *
 from player import Player
 from map import map, TITLE
 import math
+from button import Button_menu
 
 
 def run():
@@ -10,6 +11,7 @@ def run():
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
     player = Player(player_pos, player_angle, player_speed)
+    start(window, clock)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -17,6 +19,20 @@ def run():
         moves(player)
         draw(window, player, clock)
 
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def start(window, clock):
+    window.fill(WHITE)
+    button_game_start = Button_menu('HI', 100, 100)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+        if button_game_start.move_mouse_button(10, 10):
+            break
+        button_game_start.draw(10, 10, window)
         pygame.display.flip()
         clock.tick(FPS)
 
