@@ -1,4 +1,5 @@
 from setting_variables import *
+
 text_map = [
     'BBBBBBBBBBBBBBBBB',
     'B................B',

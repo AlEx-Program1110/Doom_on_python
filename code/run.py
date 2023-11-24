@@ -1,8 +1,8 @@
 import pygame
-import math
 from setting_variables import *
 from player import Player
 from map import map, TITLE
+import math
 
 
 def run():
@@ -39,9 +39,11 @@ def ray_casting(window, player_pos, player_angle):
     cur_angle = player_angle - PLAYER_FOV
     xo, yo = player_pos
     xp, yp = (xo // TITLE) * TITLE, (yo // TITLE) * TITLE
-    for ray in range(NUMBER_RAYS):
+    for ray in range(NUMBER_RAYS + 20):
         sin_angle = math.sin(cur_angle)
         cos_angle = math.cos(cur_angle)
+        depth_vertical = 1
+        depth_h = 1
         if cos_angle >= 0:
             x = xp + TITLE
             dx = 1
@@ -70,7 +72,7 @@ def ray_casting(window, player_pos, player_angle):
         if depth > depth_h:
             depth = depth_h
         depth *= math.cos(player_angle - cur_angle)
-        height = COOFIC / depth
+        height = min(int(COOFIC / depth), 2 * HEIGHT)
         c = 255 / (1 + depth * depth * 0.0002)
         color = (c, c // 2, c // 3)
         pygame.draw.rect(window, color, (ray * SCALE, HALF_HEIGHT - height // 2, SCALE, height))

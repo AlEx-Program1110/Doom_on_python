@@ -1,8 +1,11 @@
 # variables init
 import math
+import pygame
 
-WIDTH = 1200
-HEIGHT = 800
+pygame.init()
+infoObject = pygame.display.Info()
+WIDTH = infoObject.current_w
+HEIGHT = infoObject.current_h
 
 HALF_HEIGHT = HEIGHT // 2
 HALF_WIDTH = WIDTH // 2
@@ -14,7 +17,7 @@ player_speed = 2
 FPS = 300
 
 BLOCK_CHAR = 'B'
-TITLE = 100
+TITLE = 60
 
 FOV = math.pi / 3
 PLAYER_FOV = FOV / 2
