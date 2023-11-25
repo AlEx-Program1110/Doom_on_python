@@ -55,7 +55,7 @@ def ray_casting(window, player_pos, player_angle):
     cur_angle = player_angle - PLAYER_FOV
     xo, yo = player_pos
     xp, yp = (xo // TITLE) * TITLE, (yo // TITLE) * TITLE
-    for ray in range(NUMBER_RAYS + 20):
+    for ray in range(NUMBER_RAYS):
         sin_angle = math.sin(cur_angle)
         cos_angle = math.cos(cur_angle)
         depth_vertical = 1
